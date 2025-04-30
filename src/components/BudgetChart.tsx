@@ -1,5 +1,5 @@
 "use client";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 export default function BudgetChart({
   data,
@@ -9,7 +9,7 @@ export default function BudgetChart({
   const COLORS = ["#EF4444", "#22C55E"];
 
   return (
-    <div className="w-full md:w-3/4 h-64">
+    <div className="flex-1 min-w-[300px] h-64">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -28,6 +28,7 @@ export default function BudgetChart({
           <Tooltip
             formatter={(value: number, name: string) => [`$${value}`, name]}
           />
+          <Legend />
         </PieChart>
       </ResponsiveContainer>
     </div>

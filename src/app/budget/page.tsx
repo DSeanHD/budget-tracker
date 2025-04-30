@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import BudgetForm from "@/components/BudgetForm";
 import ExpenseList from "@/components/ExpenseList";
 import BudgetChart from "@/components/BudgetChart";
+import IncomeForm from "@/components/IncomeForm";
+import IncomeVsSpendingChart from "@/components/IncomeVsSpendingChart";
+import FormWrapper from "@/wrappers/FormWrapper";
+import ChartWrapper from "@/wrappers/ChartWrapper";
 import { v4 as uuidv4 } from "uuid";
 
 type Expense = {
@@ -14,15 +18,18 @@ type Expense = {
 
 export default function BudgetPage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [income, setIncome] = useState<number>(0);
   const [budgetLimit, setBudgetLimit] = useState<number>(1000);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedExpenses = localStorage.getItem("expenses");
     const storedLimit = localStorage.getItem("budgetLimit");
+    const storedIncome = localStorage.getItem("income");
 
     if (storedExpenses) setExpenses(JSON.parse(storedExpenses));
     if (storedLimit) setBudgetLimit(parseFloat(storedLimit));
+    if (storedIncome) setIncome(parseFloat(storedIncome));
 
     setLoading(false);
   }, []);
@@ -34,6 +41,10 @@ export default function BudgetPage() {
   useEffect(() => {
     localStorage.setItem("budgetLimit", budgetLimit.toString());
   }, [budgetLimit]);
+
+  useEffect (() => {
+    localStorage.setItem("income", income.toString());
+  }, [income])
 
   const handleAddExpense = (name: string, amount: number) => {
     const newExpense = {
@@ -62,19 +73,30 @@ export default function BudgetPage() {
 
   return (
     <main className="flex flex-col items-center p-6 space-y-8 max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold">💰 Budget Tracker</h1>
+      <h1 className="text-3xl font-bold">💰 Budget Tracker</h1><br />
+
+      <ChartWrapper>
+        <BudgetChart data={chartData} />
+
+        <IncomeVsSpendingChart
+          income={income}
+          spending={expenses.reduce((total, item) => total + item.amount, 0)}
+        />
+      </ChartWrapper>
+
 
       <div className="text-center">
-        <label className="block text-gray-700 mb-2">Budget Limit ($)</label>
-        <input
-          type="number"
-          className="border p-2 rounded w-40 text-center"
-          value={budgetLimit}
-          onChange={(e) => setBudgetLimit(parseFloat(e.target.value))}
-        />
+        <FormWrapper>
+          <IncomeForm income={income} onIncomeChange={setIncome} /><br />
+          <label className="text-lg font-semibold mb-2">Budget Limit ($)</label>
+          <input
+            type="number"
+            className="border border-gray-300 rounded px-3 py-2 w-full"
+            value={budgetLimit}
+            onChange={(e) => setBudgetLimit(parseFloat(e.target.value))}
+          />
+        </FormWrapper>
       </div>
-
-      <BudgetChart data={chartData} />
 
       <BudgetForm onAdd={handleAddExpense} />
 

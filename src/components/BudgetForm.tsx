@@ -30,7 +30,11 @@ export default function BudgetForm({ onAdd }: { onAdd: (name: string, amount: nu
         min="0"
         step="0.01"
       />
-      <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Expense</button>
+      <div className="flex justify-center">
+        <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          Add Expense
+        </button>
+      </div>
     </form>
   );
 }
