@@ -15,6 +15,7 @@ export default function IncomeForm({ income, onIncomeChange }: Props) {
           onChange={(e) => onIncomeChange(Number(e.target.value))}
           placeholder="Enter income"
           className="border border-gray-300 rounded px-3 py-2 w-full"
+          min={0}
         />
       </div>
     </div>

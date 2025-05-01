@@ -19,7 +19,7 @@ type Expense = {
 export default function BudgetPage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [income, setIncome] = useState<number>(0);
-  const [budgetLimit, setBudgetLimit] = useState<number>(1000);
+  const [budgetLimit, setBudgetLimit] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -93,7 +93,8 @@ export default function BudgetPage() {
             type="number"
             className="border border-gray-300 rounded px-3 py-2 w-full"
             value={budgetLimit}
-            onChange={(e) => setBudgetLimit(parseFloat(e.target.value))}
+            onChange={(e) => setBudgetLimit(Number(e.target.value))}
+            min={0}
           />
         </FormWrapper>
       </div>
